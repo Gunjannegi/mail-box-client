@@ -2,6 +2,8 @@ import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button';
 import Card from 'react-bootstrap/Card';
 import { Fragment, useState } from 'react';
+import classes from './SignUp.module.css';
+import { NavLink } from 'react-router-dom';
 const SignUp = () => {
    
     const [enteredEmail, setEnteredEmail] = useState('');
@@ -54,6 +56,8 @@ const SignUp = () => {
     };
     return (
         <Fragment>
+            <Card className={classes.card1}>
+                <h2 className={classes.heading}>Sign Up</h2>
             <Form onSubmit={submitHandler }>
             <Form.Group>
                     <Form.Label>Email address</Form.Label>
@@ -66,13 +70,18 @@ const SignUp = () => {
             <Form.Group>
                     <Form.Label> Confirm Password</Form.Label>
                     <Form.Control type='password' onChange={confirmPasswordHandler} placeholder='Confirm Password' required />
-            </Form.Group>
-            <Button variant="primary" type="submit">
+                    </Form.Group>
+                    <Button type="submit" className={classes.signupbutton}>
                 Sign Up
-            </Button>
+                    </Button>
+                   
         </Form>
-            <Card>
+            </Card>
+            <Card className={classes.card2 }>
                 <Card.Body>
+                    <Card.Text>Have an account?
+                        <NavLink to='/login'>Login</NavLink>
+                    </Card.Text>
                 </Card.Body>
             </Card>
         </Fragment>

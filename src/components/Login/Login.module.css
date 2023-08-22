@@ -1,0 +1,19 @@
+.card1 {
+    margin: 10rem 35rem 2rem 40rem;
+    padding: 1rem;
+}
+
+.card2 {
+    margin-right: 35rem;
+    margin-left: 40rem
+}
+
+.loginbutton {
+    margin-top: 1rem;
+    border-radius: 2rem;
+    width: stretch;
+}
+
+.heading {
+    text-align: center;
+}
