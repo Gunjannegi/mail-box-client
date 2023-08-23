@@ -3,9 +3,9 @@ import Button from 'react-bootstrap/Button';
 import Card from 'react-bootstrap/Card';
 import { Fragment, useState } from 'react';
 import classes from './SignUp.module.css';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useHistory } from 'react-router-dom';
 const SignUp = () => {
-   
+    const history = useHistory();
     const [enteredEmail, setEnteredEmail] = useState('');
     const [eneteredPassword, setEnteredPassword] = useState('');
     const [enteredConfirmPassword, setEnteredConfirmPassword] = useState('');
@@ -47,6 +47,7 @@ const SignUp = () => {
 
                 const data = await response.json();
                 console.log('successfully signed up', data)
+                history.push('/login')
                
             } catch (error) {
                 console.error('signup failed', error.message)
@@ -71,7 +72,7 @@ const SignUp = () => {
                     <Form.Label> Confirm Password</Form.Label>
                     <Form.Control type='password' onChange={confirmPasswordHandler} placeholder='Confirm Password' required />
                     </Form.Group>
-                    <Button type="submit" className={classes.signupbutton}>
+                    <Button type="submit" variant='danger' className={classes.signupbutton}>
                 Sign Up
                     </Button>
                    

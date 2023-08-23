@@ -9,6 +9,7 @@ const Login = () => {
     const [enteredEmail, setEnteredEmail] = useState('');
     const [enteredPassword, setEnteredPassword] = useState('');
     const [login, setLogin] = useState(false);
+    console.log(login)
     const emailChangeHandler = (event) => {
         setEnteredEmail(event.target.value)
     };
@@ -21,6 +22,7 @@ const Login = () => {
         event.preventDefault();
        
         if (!login) {
+            console.log('a')
             try {
                 const response = await fetch('https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyAaeVekfr9oPAhDg7cf3tQ5GEoC3EOff8c', {
                     method: 'POST',
@@ -54,10 +56,12 @@ const Login = () => {
         }
     }
 
-   const goToWelcomePage = () => {
+    const goToWelcomePage = () => {
+       console.log('a')
         history.push('/welcome')
     }
     if (login) {
+        console.log('a')
         goToWelcomePage();
     }
 
@@ -74,7 +78,7 @@ const Login = () => {
                     <Form.Label>Password</Form.Label>
                     <Form.Control type='password' onChange={passwordChangeHandler} placeholder='Password' required />
                         </Form.Group>
-                <Button type="submit" className={classes.loginbutton}>
+                <Button type="submit" variant='danger' className={classes.loginbutton}>
                     Login
                     </Button>
                     <NavLink to='/password' >Forgot password?</NavLink>

@@ -1,21 +1,15 @@
 import Navbar from 'react-bootstrap/Navbar';
-import Container from 'react-bootstrap/Container';
 import { NavLink } from 'react-router-dom';
-
+import classes from './MainHeader.module.css';
 const MainHeader = () => {
     return (
-        <Navbar expand='lg'>
-            <Container>
-                <div>
-                    <span>
-                        <NavLink to='/signup'>Sign Up</NavLink>
-                    </span>
-                    <span>
-                        < NavLink to='/login'>Login</NavLink>
-                       
-                    </span>
-                </div>
-            </Container>
+        <Navbar className={classes.topnav}>
+
+            <NavLink to='/signup' className={classes.link}>Sign Up</NavLink>
+
+            <NavLink to='/login' className={classes.link}>Login</NavLink>
+
+
         </Navbar>
     )
 

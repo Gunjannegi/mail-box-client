@@ -10,7 +10,10 @@
     margin-top:1rem;
     border-radius:2rem;
     width:stretch;
+    background-color:maroon;
+    border:none;
 }
-.heading{
-    text-align:center;
-}
+
+    .heading {
+        text-align: center;
+    }
