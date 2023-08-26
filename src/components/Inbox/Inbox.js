@@ -2,14 +2,15 @@
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from 'react-router-dom';
 import classes from './Inbox.module.css';
-import { fetchAllMails } from "../../store/mail-actions";
-
+import { deletingMails, fetchAllMails } from "../../store/mail-actions";
+import DeleteIcon from '@mui/icons-material/Delete';
+import { mailActions } from "../../store/mails";
 
 const Inbox = () => {
     const dispatch = useDispatch();
     const history = useHistory();
     const mails = useSelector(state => state.mail.mails);
-    console.log(mails)
+   
    
     const inboxMailHandler = async(mail) => {
         const mailObjToStr = JSON.stringify(mail)
@@ -47,11 +48,18 @@ const Inbox = () => {
             }
         }
     };
+
+    const deleteMail = (id) => {
+        dispatch(deletingMails(id))
+        const updatedMails = mails.filter((mail) => mail.id !== id)
+        dispatch(mailActions.fetchMails(updatedMails))
+    };
     return (
         <>
             <table className={classes.table }>
                 <tbody>
                     {mails.map((mail) => (
+                        <>
                         <tr onClick={() => inboxMailHandler(mail)} className={classes.row }>
                             <th scope="row">
                                 <div className={mail.status === 'unread' ?  classes.column1 : ''}></div>
@@ -59,8 +67,16 @@ const Inbox = () => {
                             <td className='column'>{mail.senderName}</td>
                             <td>{mail.subject}</td>
                             <td>{mail.message.blocks[0].text}</td>
-                            <td>{mail.time}</td>
+                                <td>{mail.time}</td>
+                                <td>
+                                    <button onClick={(e) => {
+                                        e.stopPropagation();
+                                        deleteMail(mail.id)
+                                    }}><DeleteIcon /></button>
+                                </td>
                         </tr>
+                           
+                        </>
                     ))}
                 </tbody>
             </table>

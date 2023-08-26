@@ -30,3 +30,34 @@ export const fetchAllMails = () => {
         }
     }
 }
+
+export const deletingMails = (id) => {
+    return async (dispatch) => {
+        const deleteData = async() => {
+            const email = localStorage.getItem('email');
+            const correctedEmail = email.replace(/[^a-zA-Z0-9]/g, '');
+            const response = await fetch(`https://mailboxclient-31263-default-rtdb.firebaseio.com/${correctedEmail}.json`)
+            if (!response.ok) {
+                throw new Error('Could not fetch data!')
+            }
+            const existingData = await response.json();
+            console.log(existingData)
+            for (const key in existingData) {
+                console.log(key, id)
+                if (key === id) {
+                    const response = await fetch(`https://mailboxclient-31263-default-rtdb.firebaseio.com/${correctedEmail}/${key}.json`, {
+                        method: 'DELETE',
+                        header: {
+                            'Content-Type': 'application/json'
+                        }
+                    })
+                    if (!response.ok) {
+                        throw new Error('Could not delete data!')
+                    }
+                    console.log('successfully deleted')
+                }
+            }
+        }
+        deleteData();
+    }
+}
