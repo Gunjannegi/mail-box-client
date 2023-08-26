@@ -1,21 +1,62 @@
-.wrapperclass {
-    padding: 1rem;
-    border: 1px solid #ccc;
+
+
+.sidebar{
+    background-color:white;
+    border-radius:0rem;
+    padding-top:1rem;
+}
+.inline{
+    display:inline-flex;
    
 }
 
-.editorclass {
-    background-color: white;
-    padding: 1rem;
-    border: 1px solid #ccc;
+.compose{
+    border:solid;
+    border-radius:2rem;
+    border-color:maroon;
+    margin-bottom:2rem;
+}
+.compose:hover{
+    background-color:maroon;
    
 }
-
-.toolbarclass {
-    border: 1px solid #ccc;
-  
+.subtitle {
+    
+    border-bottom: solid;
+    width: 150px;
+    padding-top: 1rem;
+}
+.inbox {
+    text-decoration: none;
+    color: maroon;
+    padding-left: 1.2rem;
 }
 
-.composecard{
-    margin:5rem 15rem 15rem 15rem;
+    .inbox:hover {
+        color: crimson;
+    }
+
+
+.navlink1 {
+    color: maroon;
+    text-decoration: none;
+    padding: 1rem;
+    font-size: 1.1rem;
+}
+.navlink1:hover{
+    color:white;
+    
+}
+.card{
+    width:85rem;
+    height:100%;
+    margin-top:1rem;
+    margin-left:0.5rem;
+    background-color:beige;
+    border:hidden;
+}
+.unread{
+    padding-left:2rem;
+    font-size:0.8rem;
+    font-weight:bold;
 }

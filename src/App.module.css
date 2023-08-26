@@ -1,0 +1,62 @@
+.heading {
+    background-color: brown;
+    color: white;
+    padding-left: 1.1rem;
+    font-weight: bold;
+    font-size: 2rem;
+}
+
+.sidebar {
+    width: 10rem;
+    background-color: white;
+}
+
+.inline {
+    display: inline-flex;
+    margin-top: 1rem;
+}
+
+ul {
+    list-style-type: none;
+    text-decoration: none;
+    border: hidden;
+    margin: 0.5rem;
+}
+
+.compose {
+    border: solid;
+    border-radius: 2rem;
+    border-color: maroon;
+}
+
+    .compose:hover {
+        background-color: maroon;
+    }
+
+.subtitle {
+    border-bottom: solid;
+    width: 100px;
+    padding-top: 1rem;
+}
+
+
+.inbox {
+    text-decoration: none;
+    color: maroon;
+    padding-left: 1.2rem;
+}
+
+    .inbox:hover {
+        color: crimson;
+    }
+
+.navlink1 {
+    color: maroon;
+    text-decoration: none;
+    padding: 1rem;
+    font-size: 1.1rem;
+}
+
+    .navlink1:hover {
+        color: white;
+    }

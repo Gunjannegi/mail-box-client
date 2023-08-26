@@ -1,26 +1,48 @@
-import { Route } from 'react-router-dom';
+import { Route, Redirect } from 'react-router-dom';
 import SignUp from "./components/SignUp/SignUp";
-import { Fragment } from 'react';
+import { Fragment, useEffect } from 'react';
 import MainHeader from './components/MainHeader/MainHeader';
 import Login from './components/Login/Login';
 import Welcome from './components/Welcome/Welcome';
 import ForgotPassword from './components/ForgotPassword/ForgotPassword';
 
+import {  useDispatch, useSelector } from 'react-redux';
+import { Navbar } from 'react-bootstrap';
+import classes from './App.module.css';
+import { fetchAllMails } from './store/mail-actions';
+import Inbox from './components/Inbox/Inbox';
+import InboxList from './components/Inbox/InboxList';
 function App() {
+    const dispatch = useDispatch();
+    useEffect(() => {
+        dispatch(fetchAllMails());
+    })
+    const isAuth = useSelector(state=> state.auth.isAuthenticated)
     return (
         <Fragment>
-            <MainHeader/>
-        <Route path='/signup'>
-            <SignUp/>
-        </Route>
+            <MainHeader />
+            {isAuth && <Navbar className={classes.heading}>Mail Box</Navbar>}
+            <div style={{ display: 'inline-flex' }}>
+            {isAuth && <Welcome/>}
+            <Route path='/' exact>
+                {!isAuth && <Redirect to='/login'/> }
+                </Route>
+                <Route path='/inbox' exact>
+                    <Inbox />
+                </Route>
+                <Route path='/inboxlist'>
+                    <InboxList/>
+                </Route>
+            </div>
+            <Route path='/signup'>
+                < SignUp />
+            </Route>
             <Route path='/login'>
                 <Login />
             </Route>
-            <Route path='/welcome'>
-                <Welcome/>
-            </Route>
+          
             <Route path='/password'>
-                <ForgotPassword/>
+                <ForgotPassword />
             </Route>
         </Fragment>
         

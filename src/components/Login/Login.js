@@ -4,12 +4,15 @@ import Card from 'react-bootstrap/Card';
 import { Fragment, useState } from 'react';
 import classes from './Login.module.css';
 import { NavLink, useHistory } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { authActions } from '../../store/auth';
 const Login = () => {
-    const history = useHistory()
+    const history = useHistory();
+    const dispatch = useDispatch();
     const [enteredEmail, setEnteredEmail] = useState('');
     const [enteredPassword, setEnteredPassword] = useState('');
     const [login, setLogin] = useState(false);
-    console.log(login)
+   
     const emailChangeHandler = (event) => {
         setEnteredEmail(event.target.value)
     };
@@ -44,8 +47,8 @@ const Login = () => {
                 }
                 const data = await response.json();
                 console.log('successfully loggedIn', data)
-                
-                
+
+                dispatch(authActions.login(data.idToken));
                 localStorage.setItem('email', enteredEmail)
                 localStorage.setItem('token', data.idToken)
                 setLogin(true);
@@ -57,11 +60,9 @@ const Login = () => {
     }
 
     const goToWelcomePage = () => {
-       console.log('a')
         history.push('/welcome')
     }
     if (login) {
-        console.log('a')
         goToWelcomePage();
     }
 
@@ -81,6 +82,7 @@ const Login = () => {
                 <Button type="submit" variant='danger' className={classes.loginbutton}>
                     Login
                     </Button>
+
                     <NavLink to='/password' >Forgot password?</NavLink>
             </Form>
         </Card>
