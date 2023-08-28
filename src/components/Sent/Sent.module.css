@@ -1,0 +1,17 @@
+.table {
+    border: hidden;
+    height: min-content;
+    width: 80rem;
+    background-color: beige;
+    margin: 3rem 0rem 0rem 1rem;
+}
+.deletebutton {
+    width: 3rem;
+}
+.column4 {
+    width: 5rem;
+    font-size: 0.8rem;
+}
+.row:hover {
+    background-color: bisque;
+}

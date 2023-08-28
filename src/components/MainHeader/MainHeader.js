@@ -15,10 +15,14 @@ const MainHeader = () => {
     };
     return (
         <Navbar className={classes.topnav}>
-            <NavLink to='/signup' className={classes.link}>Sign Up</NavLink>
-
-            {!isAuth && <NavLink to='/login' className={classes.link}>Login</NavLink>}
-            {isAuth && <NavLink to='/login' className={classes.link} onClick={logoutHandler }>Logout</NavLink>}
+            {!isAuth &&
+                <div>
+                <NavLink to='/signup' className={classes.link}>Sign Up</NavLink>
+                <NavLink to='/login' className={classes.link}>Login</NavLink></div>}
+            {isAuth &&
+                <div>
+                    <span className={classes.welcome}>Welcome</span>
+                <NavLink to='/login' className={classes.logout} onClick={logoutHandler}>Logout</NavLink></div>}
         </Navbar>
     )
 

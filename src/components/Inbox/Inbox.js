@@ -10,7 +10,9 @@ const Inbox = () => {
     const dispatch = useDispatch();
     const history = useHistory();
     const mails = useSelector(state => state.mail.mails);
-   
+    const tc = useSelector(state => state.mail.totalUnreadMessage);
+    const date = new Date();
+    const showDate = date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate();
    
     const inboxMailHandler = async(mail) => {
         const mailObjToStr = JSON.stringify(mail)
@@ -49,30 +51,39 @@ const Inbox = () => {
         }
     };
 
-    const deleteMail = (id) => {
-        dispatch(deletingMails(id))
-        const updatedMails = mails.filter((mail) => mail.id !== id)
+    const deleteMail = (thisMail) => {
+        dispatch(deletingMails(thisMail.id))
+        const updatedMails = mails.filter((mail) => mail.id !== thisMail.id)
         dispatch(mailActions.fetchMails(updatedMails))
+        if (tc > 0 && thisMail.status==='unread') {
+            dispatch(mailActions.totalCount(Number(tc) - 1))
+        }
     };
     return (
         <>
-            <table className={classes.table }>
+            <table className={classes.table}>
+
                 <tbody>
                     {mails.map((mail) => (
                         <>
                         <tr onClick={() => inboxMailHandler(mail)} className={classes.row }>
                             <th scope="row">
                                 <div className={mail.status === 'unread' ?  classes.column1 : ''}></div>
-                            </th>
-                            <td className='column'>{mail.senderName}</td>
-                            <td>{mail.subject}</td>
-                            <td>{mail.message.blocks[0].text}</td>
-                                <td>{mail.time}</td>
+                                </th>
+                                <td style={{ fontWeight: mail.status==='unread' ? 'bold' : ''}}>{mail.senderName}</td>
                                 <td>
-                                    <button onClick={(e) => {
+                                    <span style={{ fontWeight: mail.status === 'unread' ? 'bold' : '' }} > {mail.subject}</span>
+                                    
+                                    <div
+                                        style={{ color: 'gray', width: '40rem', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{mail.message.blocks[0].text} </div></td>
+
+                                <td className={classes.column4} style={{ fontWeight: mail.status === 'unread' ? 'bold' : '' }}>{mail.date === showDate ? mail.time : mail.date}</td>
+                                <td className={classes.deletebutton}>
+                                    <button style={{ backgroundColor: 'beige', border: 'none' }}
+                                        onClick={(e) => {
                                         e.stopPropagation();
-                                        deleteMail(mail.id)
-                                    }}><DeleteIcon /></button>
+                                            deleteMail(mail)
+                                        }}><DeleteIcon style={{ fontSize: '1rem' }} /></button>
                                 </td>
                         </tr>
                            

@@ -12,7 +12,7 @@ const Welcome = () => {
             <div className={classes.inline}>
                 <Card className={classes.sidebar}>   
                     <ul>
-                        <li className={classes.compose}>
+                        <li>
                             <Compose/>
                         </li>
                         <li className={classes.subtitle}>

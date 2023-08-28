@@ -4,9 +4,13 @@ import { EditorState, convertToRaw } from 'draft-js';
 import { Editor } from 'react-draft-wysiwyg';
 import classes from './Compose.module.css';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
+import { sentMailsList } from '../../store/mail-actions';
+import { useDispatch } from 'react-redux';
+//import { mailActions } from '../../store/mails';
 
 
 const Compose = () => {
+    const dispatch = useDispatch();
     const [show, setShow] = useState(false);
 
     const handleClose = () => setShow(false);
@@ -19,8 +23,9 @@ const Compose = () => {
     const [bcc, setBcc] = useState('');
     const [subject, setSubject] = useState('')
     const [senderName, setSenderName] = useState('');
+   
     const email = localStorage.getItem('email');
-
+    const senderEmail = email.replace(/[^a-zA-Z0-9]/g, '');
    
    
     const emailToAlphabets = (email) => {
@@ -73,6 +78,27 @@ const Compose = () => {
             minute: '2-digit'
         });
         const showDate = date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate();
+        const postDataToFirebase = async (endPoint, value) => {
+            try {
+                const response = await fetch(`https://mailboxclient-31263-default-rtdb.firebaseio.com/${endPoint}.json`, {
+                    method: 'POST',
+                    body: JSON.stringify(value),
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                })
+                if (!response.ok) {
+                    const error = response.json()
+                    throw new Error('Something went wrong', error)
+                }
+                const responseData = await response.json();
+                console.log(`Data posted successfully with the name '${endPoint}':`, responseData)
+
+            } catch (error) {
+                console.log('failed', error)
+            }
+
+        }
         
         const mailTo = {
             senderName: senderName,
@@ -84,6 +110,13 @@ const Compose = () => {
             time: showTime,
             status: 'unread'
         }
+       
+        postDataToFirebase(to, mailTo)
+        postDataToFirebase(`sentBy${senderEmail}`, mailTo)
+        setTimeout(()=>(
+            dispatch(sentMailsList())
+        ),1000)
+       
         if (cc) {
             const ccMail = {
                 senderName: senderName,
@@ -91,82 +124,31 @@ const Compose = () => {
                 from: email,
                 subject: subject,
                 message: message,
-                 date: showDate,
-                time: showTime,
-                status: 'unread'
-            }
-            try {
-                const response = await fetch(`https://mailboxclient-31263-default-rtdb.firebaseio.com/${cc}.json`, {
-                    method: 'POST',
-                    body: JSON.stringify(ccMail),
-                    headers: {
-                        'Content-Type': 'application/json'
-                    }
-                })
-                if (!response.ok) {
-                    const error = response.json()
-                    throw new Error('Something went wrong', error)
-                }
-                const data = await response.json();
-                console.log('successfully sent', data)
-
-            } catch (error) {
-                console.log('failed', error)
-            }
-        }
-        if (bcc) {
-            const bccMail = {
-                senderName: senderName,
-                bcc: bcc,
-                from: email,
-                subject: subject,
-                message: message,
                 date: showDate,
                 time: showTime,
                 status: 'unread'
             }
-
-            try {
-                const response = await fetch(`https://mailboxclient-31263-default-rtdb.firebaseio.com/${bcc}.json`, {
-                    method: 'POST',
-                    body: JSON.stringify(bccMail),
-                    headers: {
-                        'Content-Type': 'application/json'
-                    }
-                })
-                if (!response.ok) {
-                    const error = response.json()
-                    throw new Error('Something went wrong', error)
-                }
-                const data = await response.json();
-                console.log('successfully sent', data)
-
-            } catch (error) {
-                console.log('failed', error)
-            }
+            postDataToFirebase(cc, ccMail)
         }
-        try {
-            const response = await fetch(`https://mailboxclient-31263-default-rtdb.firebaseio.com/${to}.json`, {
-                method: 'POST',
-                body: JSON.stringify(mailTo),
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            })
-            if (!response.ok) {
-                const error = response.json()
-                throw new Error('Something went wrong', error)
-            }
-            const data = await response.json();
-            console.log('successfully sent', data)
 
-        } catch (error) {
-            console.log('failed', error)
-        }
-    };
+            if (bcc) {
+                const bccMail = {
+                    senderName: senderName,
+                    bcc: bcc,
+                    from: email,
+                    subject: subject,
+                    message: message,
+                    date: showDate,
+                    time: showTime,
+                    status: 'unread'
+                }
+                postDataToFirebase(bcc, bccMail)
+
+            }
+        };
     return (
         <Fragment>
-            <Button onClick={handleShow}>Compose</Button>
+            <Button variant='danger' className={classes.composebutton} onClick={handleShow}>Compose</Button>
             <Modal
                 show={show}
                 onHide={handleClose}

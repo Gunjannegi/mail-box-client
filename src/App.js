@@ -9,19 +9,25 @@ import ForgotPassword from './components/ForgotPassword/ForgotPassword';
 import {  useDispatch, useSelector } from 'react-redux';
 import { Navbar } from 'react-bootstrap';
 import classes from './App.module.css';
-import { fetchAllMails } from './store/mail-actions';
+import { fetchAllMails, sentMailsList } from './store/mail-actions';
 import Inbox from './components/Inbox/Inbox';
 import InboxList from './components/Inbox/InboxList';
+import Sent from './components/Sent/Sent';
+import SentList from './components/Sent/SentList';
 function App() {
     const dispatch = useDispatch();
     useEffect(() => {
         dispatch(fetchAllMails());
+        dispatch(sentMailsList());
     })
     const isAuth = useSelector(state=> state.auth.isAuthenticated)
     return (
         <Fragment>
             <MainHeader />
-            {isAuth && <Navbar className={classes.heading}>Mail Box</Navbar>}
+            {isAuth && <Navbar className={classes.heading}>
+                <span> Mail Box</span>
+                <span style={{ paddingLeft: '73rem', fontSize: '1rem' }}>{localStorage.getItem('email')}</span>
+            </Navbar>}
             <div style={{ display: 'inline-flex' }}>
             {isAuth && <Welcome/>}
             <Route path='/' exact>
@@ -32,6 +38,12 @@ function App() {
                 </Route>
                 <Route path='/inboxlist'>
                     <InboxList/>
+                </Route>
+                <Route path='/sent'>
+                    <Sent/>
+                </Route>
+                <Route path='/sentlist'>
+                    <SentList/>
                 </Route>
             </div>
             <Route path='/signup'>

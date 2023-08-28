@@ -1,6 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-const initialMailState = { mails: [] , totalUnreadMessage: 0}
+const initialMailState = { mails: [] , totalUnreadMessage: 0, sentMail:[]}
+
 
 const mailSlice = createSlice({
     name: 'fetchMails',
@@ -8,10 +9,14 @@ const mailSlice = createSlice({
     reducers: {
         fetchMails(state, action) {
             state.mails = action.payload
-            console.log(state.mails)
+            
         },
         totalCount(state, action) {
             state.totalUnreadMessage = action.payload
+        },
+        allSentMails(state, action) {
+            state.sentMail =  action.payload;
+           
         }
     }
    
