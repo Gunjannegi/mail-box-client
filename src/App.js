@@ -19,6 +19,12 @@ function App() {
     useEffect(() => {
         dispatch(fetchAllMails());
         dispatch(sentMailsList());
+
+        const intervalId = setInterval(() => {
+            dispatch(fetchAllMails());
+        }, 2000); 
+        
+        return () => clearInterval(intervalId);
     })
     const isAuth = useSelector(state=> state.auth.isAuthenticated)
     return (
@@ -31,7 +37,8 @@ function App() {
             <div style={{ display: 'inline-flex' }}>
             {isAuth && <Welcome/>}
             <Route path='/' exact>
-                {!isAuth && <Redirect to='/login'/> }
+                    {!isAuth && <Redirect to='/login' />}
+
                 </Route>
                 <Route path='/inbox' exact>
                     <Inbox />
