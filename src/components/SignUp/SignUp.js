@@ -4,14 +4,16 @@ import Card from 'react-bootstrap/Card';
 import { Fragment, useState } from 'react';
 import classes from './SignUp.module.css';
 import { NavLink, useHistory } from 'react-router-dom';
+import useHttp from '../useHttp/useHttp';
 const SignUp = () => {
     const history = useHistory();
     const [enteredEmail, setEnteredEmail] = useState('');
     const [eneteredPassword, setEnteredPassword] = useState('');
     const [enteredConfirmPassword, setEnteredConfirmPassword] = useState('');
     const [enteredName, setEnteredName] = useState('');
-   
- 
+    const { errorPost1, sendHttpRequest: sendPostRequest1 } = useHttp();
+    const { errorPost2, sendHttpRequest: sendPostRequest2 } = useHttp();
+
     const emailChangeHandler = async (event) => {
         setEnteredEmail(event.target.value)
     };
@@ -29,60 +31,38 @@ const SignUp = () => {
         setEnteredConfirmPassword(event.target.value)
     }
 
+   
+    const saveUserName = async () => {
+        const correctedEmail = enteredEmail.replace(/[^a-zA-Z0-9]/g, '');
+        const body2 = {
+            senderName: enteredName
+        }
+        await sendPostRequest2('POST', body2, `https://mailboxclient-31263-default-rtdb.firebaseio.com/${correctedEmail}username.json`)
+    }
+   
+    const onSignupPost = (data) => {
+        console.log(data)
+        console.log(errorPost1)
+        console.log(errorPost2)
+            history.push('/login')
+            saveUserName();
+    }
     const submitHandler = async (event) => {
         event.preventDefault();
-       
+
         if (eneteredPassword === enteredConfirmPassword) {
-            
-            try {
-
-                const response = await fetch('https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyAaeVekfr9oPAhDg7cf3tQ5GEoC3EOff8c', {
-                    method: 'POST',
-                    body: JSON.stringify({
-                        
-                        email: enteredEmail,
-                        password: eneteredPassword,
-                        returnSecureToken: true
-                    }),
-                    headers: {
-                        'Content-Type': 'application/json'
-                    }
-                })
-                if (!response.ok) {
-                    const errorData = await response.json();
-                    throw new Error(errorData.message || 'Something went wrong')
-                }
-
-                const data = await response.json();
-                console.log('successfully signed up', data)
-                history.push('/login')
-               
-            } catch (error) {
-                console.error('signup failed', error.message)
+            const body1 = {
+                email: enteredEmail,
+                password: eneteredPassword,
+                returnSecureToken: true
             }
 
-            const correctedEmail = enteredEmail.replace(/[^a-zA-Z0-9]/g, '');
-            try {
-                const response = await fetch(`https://mailboxclient-31263-default-rtdb.firebaseio.com/${correctedEmail}username.json`, {
-                    method: 'POST',
-                    body: JSON.stringify({ senderName: enteredName }),
-                    headers: {
-                        'Content-Type': 'application/json'
-                    }
-                })
-                if (!response.ok) {
-                    const error = response.json()
-                    throw new Error('Something went wrong', error)
-                }
-                const data = await response.json();
-                console.log('successfully saved the username', data)
-
-            } catch (error) {
-                console.log('failed', error)
-            }
+            await sendPostRequest1('POST', body1, 'https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyAaeVekfr9oPAhDg7cf3tQ5GEoC3EOff8c',onSignupPost);
 
         }
+
     };
+   
     return (
         <Fragment>
             <Card className={classes.card1}>
@@ -104,6 +84,8 @@ const SignUp = () => {
                     <Form.Label> Confirm Password</Form.Label>
                     <Form.Control type='password' onChange={confirmPasswordHandler} placeholder='Confirm Password' required />
                     </Form.Group>
+                    {errorPost1 && <p style={{ color: 'red', fontWeight: 'bold' }}>Something went wrong! Signup failed!</p>}
+                   
                     <Button type="submit" variant='danger' className={classes.signupbutton}>
                 Sign Up
                     </Button>

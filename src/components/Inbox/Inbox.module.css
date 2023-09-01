@@ -25,3 +25,13 @@
    
     width:3rem;
 }
+.modifyText {
+    color: gray;
+    width: 40rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-height: 1.5em;
+    line-height: 1.5em;
+    
+}

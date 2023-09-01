@@ -8,7 +8,6 @@ const Sent = () => {
     const history = useHistory();
     const dispatch = useDispatch();
     const sentMails = useSelector(state => state.mail.sentMail);
-    console.log(sentMails)
     const date = new Date();
     const showDate = date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate();
 
@@ -36,7 +35,7 @@ const Sent = () => {
                                 <th scope="row" >*</th>
                                 <td>To: {mail.to.split('gmail')[0]}</td>
                                 <td> {mail.subject}
-                                    <div style={{ color: 'gray', width: '40rem', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{mail.message.blocks[0].text} </div> </td>
+                                    <div className={classes.modifyText} dangerouslySetInnerHTML={{ __html: mail.message }}></div> </td>
 
                                 <td className={classes.column4}>{mail.date === showDate ? mail.time : mail.date}</td>
                                 <td className={classes.deletebutton}>

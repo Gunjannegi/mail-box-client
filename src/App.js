@@ -15,18 +15,22 @@ import InboxList from './components/Inbox/InboxList';
 import Sent from './components/Sent/Sent';
 import SentList from './components/Sent/SentList';
 function App() {
+    const isAuth = useSelector(state => state.auth.isAuthenticated)
     const dispatch = useDispatch();
     useEffect(() => {
+        if (isAuth) {
         dispatch(fetchAllMails());
         dispatch(sentMailsList());
 
-        const intervalId = setInterval(() => {
-            dispatch(fetchAllMails());
-        }, 2000); 
         
-        return () => clearInterval(intervalId);
-    })
-    const isAuth = useSelector(state=> state.auth.isAuthenticated)
+            const intervalId = setInterval(() => {
+                dispatch(fetchAllMails());
+            }, 1000);
+
+            return () => clearInterval(intervalId);
+        }
+        })
+
     return (
         <Fragment>
             <MainHeader />

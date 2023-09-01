@@ -1,10 +1,10 @@
 import { mailActions } from "./mails";
 
 export const fetchAllMails = () => {
+    const email = localStorage.getItem('email');
+    const correctedEmail = email.replace(/[^a-zA-Z0-9]/g, '');
     return async (dispatch) => {
         const fetchData = async () => {
-            const email = localStorage.getItem('email');
-            const correctedEmail = email.replace(/[^a-zA-Z0-9]/g, '');
             const response = await fetch(`https://mailboxclient-31263-default-rtdb.firebaseio.com/${correctedEmail}.json`)
             if (!response.ok) {
                 throw new Error('Could not fetch data!')
@@ -13,7 +13,7 @@ export const fetchAllMails = () => {
             return data;
         }
         try {
-            const allMails = await fetchData();
+            const allMails = await  fetchData()
             const allMailsList = [];
             let totalCount = 0;
             for (const key in allMails) {
@@ -82,7 +82,6 @@ export const sentMailsList = () => {
             for (const key in sentList) {
                 allSentMailsList.push({ ...sentList[key], id: key })
             }
-
             dispatch(mailActions.allSentMails(allSentMailsList))
         } catch (error) {
             console.error('failed', error.message);
